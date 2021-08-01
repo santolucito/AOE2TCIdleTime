@@ -1,0 +1,12 @@
+# AOE2TCIdleTime calculator
+
+## Installation
+
+Ensure you have at least python 3.7
+
+clone the latest version of aoc-mgz and install with 
+
+   python3.7 -m pip install .
+
+You can also install the latest release of aoc-mgz directly from pip, but this may or may not have all the latest changes.
+
