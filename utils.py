@@ -1,22 +1,18 @@
 from constants import *
 
-class Player:
-    def __init__(self, name, player_id):
-        self.name = name
-        self.player_id = player_id
-        self.total_time_until_castle_click = 0
-        self.tc_work_time = 0
-        self.tc_id = 0
-        self.clicked_castle = False
-        self.num_vills_produced = 0
-
 #TODO would like to only set to true when castle research actually starts (rather than just being queued)
 #to do this, we need to keep track of when each item queued actually completes
 #we are essentially rebuilding a tiny portion of the game engine by doing this
+def isFeudalResearch(op, players, p_id):
+    return (op.type == "action" and 
+           op.action.type == "research" and
+           op.action.technology_type == FEUDAL_ID and
+           op.action.player_id == p_id)
+
 def isCastleResearch(op, players, p_id):
     return ((op.type == "action" and 
            op.action.type == "research" and
-           op.action.technology_type == FEUDAL_ID and
+           op.action.technology_type == CASTLE_ID and
            op.action.player_id == p_id)
            or
            players[p_id].clicked_castle)

@@ -1,5 +1,24 @@
 # AOE2TCIdleTime calculator
 
+This is a command line utility to calculate your TC idle time in AoE2.
+
+### Can't I just use Capture Age?
+
+You can also use Capture Age to find out your TC idle time but that requires running the game.
+Capture Age fully simulates the game, and calculates idle time through that simulation.
+That means in order to get the idle time, you need to sit through the game again =.
+Even running on the fastest simulation speed, this is still a bit slow.
+
+By running on the command line, you can batch process recorded game files
+
+### Limitations
+
+This tool will only tell you the TC idle time up until you click Castle Age
+
+### Known bugs
+
+If you queue up Castle Age behind a bunch of villagers, this will break the calculator, as it assumes the time you clicked the Castle age upgrade is the end of the productive TC time.
+
 ## Installation
 
 Ensure you have at least python 3.7
@@ -10,3 +29,4 @@ clone the latest version of aoc-mgz and install with
 
 You can also install the latest release of aoc-mgz directly from pip, but this may or may not have all the latest changes.
 
+## Usage
