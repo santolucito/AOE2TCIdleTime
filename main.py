@@ -13,10 +13,20 @@ from utils import *
 SAVEGAMEPATH = "/mnt/c/Users/mark-omi/Games/Age of Empires 2 DE/76561198177849325/savegame"
 
 list_of_files = glob.glob(SAVEGAMEPATH+"/*.aoe2record") 
-#latest_file = max(list_of_files, key=os.path.getctime)
+latest_file = max(list_of_files, key=os.path.getctime)
 #latest_file = SAVEGAMEPATH + "/MP Replay v101.101.50700.0 @2021.07.26 210453 (1).aoe2record"
-latest_file = "problem.aoe2record"
+#latest_file = "problem.aoe2record"
 players = {}
+
+def printPlayerDetails():
+    for k, p in players.items():
+        print (p.tc_id)
+        print ("vills: " + str(p.num_vills_produced))
+        print (p.tc_work_time)
+        print (p.total_time_until_castle_click)
+        print (p.clicked_castle)
+        print("pre-castle effective idle time ("+p.name+"): " + str((p.total_time_until_castle_click - p.tc_work_time)/1000))
+
 
 #TODO how to make this work cross-platform
 with open(latest_file, 'rb') as data:
@@ -37,23 +47,20 @@ with open(latest_file, 'rb') as data:
                 players[i].clicked_castle = True
             elif (op.type == "action" and not op.action.type_int in [103, 130]): #103, 130 are unknown commands
                 if (isVillQueue(op.action, p.player_id)):
-                    players[p.player_id].tc_id = op.action.building_ids[0]
+                    players[i].tc_id = op.action.building_ids[0]
                 production_updates = inducedTCWorkTime(op.action, players, p.player_id)
                 players[i].tc_work_time += production_updates["tc_work_time"]
                 players[i].num_vills_produced += production_updates["vill_production_change"]
             elif (op.type == "sync"):
                 players[i].total_time_until_castle_click += op.time_increment
-        both_castle = True
-        for i, p in players.items():
-            both_castle = both_castle and p.clicked_castle
-        if both_castle:
+        
+        if bothCastle(players):
             break
 
-    for k, p in players.items():
-        pprint (p.tc_id)
-        pprint (p.num_vills_produced)
-        pprint (p.tc_work_time)
-        pprint (p.total_time_until_castle_click)
-        pprint (p.clicked_castle)
-        print("pre-castle effective idle time ("+p.name+"): " + str((p.total_time_until_castle_click - p.tc_work_time)/1000))
+        if (op.type == "action" and op.action.type != "move" and False):
+            print(op)
+            printPlayerDetails()
+            wait = input()
+
+    printPlayerDetails()
 

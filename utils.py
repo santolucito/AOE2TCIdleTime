@@ -10,13 +10,20 @@ class Player:
         self.clicked_castle = False
         self.num_vills_produced = 0
 
+
+def bothCastle(players):
+    both_castle = True
+    for i, p in players.items():
+        both_castle = both_castle and p.clicked_castle
+    return both_castle
+
 #TODO would like to only set to true when castle research actually starts (rather than just being queued)
 #to do this, we need to keep track of when each item queued actually completes
 #we are essentially rebuilding a tiny portion of the game engine by doing this
 def isCastleResearch(op, players, p_id):
     return ((op.type == "action" and 
            op.action.type == "research" and
-           op.action.technology_type == FEUDAL_ID and
+           op.action.technology_type == CASTLE_ID and
            op.action.player_id == p_id)
            or
            players[p_id].clicked_castle)
@@ -42,6 +49,9 @@ def isTCResearch(action, p_id, tc_id):
 def tcResearchTime(action):
     return ID_INFO[action.technology_type]
 
+#shift dequeue removes up to 5 vill from queue
+def shiftDequeue(action):
+    return (int.from_bytes([action.flags[0]], "little") == 1)
 
 
 # to calculate tc work time, add up the build time for everything queued, and substract the build time of everything dequeued
@@ -56,7 +66,7 @@ def inducedTCWorkTime(action, players, p_id):
         vill_production_change += action.queue_amount
         tc_work_time = VILL_TIME * action.queue_amount
     elif isVillDequeue(action, p_id, players[p_id].tc_id):
-        if (int.from_bytes([action.flags[0]], "little") == 1): #indicates if shift+dequeue was pressed
+        if shiftDequeue(action):
             tc_work_time -= VILL_TIME * 5
         else: 
             tc_work_time -= VILL_TIME
