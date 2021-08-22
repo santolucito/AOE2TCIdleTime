@@ -24,5 +24,11 @@ ID_INFO = dict([(VILL_ID, VILL_TIME),
                 (FEUDAL_ID, FEUDAL_TIME)
                 ])
                 
+ID_NAMES = dict([(VILL_ID, "VILL"),
+                (LOOM_ID, "LOOM"),
+                (WHEELBARROW_ID, "WHEELBARROW"),
+                (TOWNWATCH_ID, "TOWNWATCH"),
+                (FEUDAL_ID, "FEUDAL")
+                ])
 
 

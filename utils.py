@@ -56,6 +56,7 @@ def shiftDequeue(action):
 def inducedTCWorkTime(action, players, p_id):
     tc_work_time = 0
     vill_production_change = 0
+    new_tech = []
     if isVillQueue(action, p_id):        
         if (action.queue_amount > 1):
             print("Player "+str(p_id)+" MULTIQUE'D: " + str(action.queue_amount))
@@ -68,9 +69,9 @@ def inducedTCWorkTime(action, players, p_id):
             tc_work_time -= VILL_TIME
             vill_production_change -= 1
     elif isTCResearch(action, p_id, players[p_id].tc_id):
-        if (p_id == 2):
-            print(action)
         tc_work_time = tcResearchTime(action)
+        new_tech = [{"id":action.technology_type, "name":ID_NAMES[action.technology_type], "timestamp": players[p_id].time_elapsed_so_far} ]
     return {"tc_work_time": tc_work_time,
-            "vill_production_change": vill_production_change}
+            "vill_production_change": vill_production_change,
+            "new_tech" : new_tech}
 
