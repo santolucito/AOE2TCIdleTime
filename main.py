@@ -9,6 +9,7 @@ from pprint import pprint
 
 from constants import *
 from utils import *
+from player import *
 
 SAVEGAMEPATH = "/mnt/c/Users/mark-omi/Games/Age of Empires 2 DE/76561198177849325/savegame"
 
@@ -44,6 +45,8 @@ with open(latest_file, 'rb') as data:
         #TODO perhaps a bit inefficient - an action message can only apply to a single player
         for i, p in players.items():
             if isCastleResearch(op, players, p.player_id):
+                players[i].feudal_time = players[i].total_time_until_castle_click 
+            elif isCastleResearch(op, players, p.player_id):
                 players[i].clicked_castle = True
             elif (op.type == "action" and not op.action.type_int in [103, 130]): #103, 130 are unknown commands
                 if (isVillQueue(op.action, p.player_id)):
